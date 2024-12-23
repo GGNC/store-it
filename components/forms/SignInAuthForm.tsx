@@ -18,10 +18,14 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { createAccount } from "@/lib/actions/user.actions";
+import OTPModal from "../OTPModal";
 
 function SignInAuthForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [accountId, setAccountId] = useState(null);
+
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -29,9 +33,23 @@ function SignInAuthForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof signInSchema>) {
-    console.log(data);
-  }
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    setIsLoading(true);
+    setErrorMessage("");
+
+    try {
+      const user = await createAccount({
+        fullName: "",
+        email: data.email,
+      });
+
+      setAccountId(user.accountId);
+    } catch (error) {
+      setErrorMessage("Failed to create an account. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <>
       <Form {...form}>
@@ -81,7 +99,10 @@ function SignInAuthForm() {
           </div>
         </form>
       </Form>
-      {/* OTP VERIFICATION */}
+
+      {accountId && (
+        <OTPModal email={form.getValues("email")} accountId={accountId} />
+      )}
     </>
   );
 }
