@@ -18,7 +18,7 @@ import { Input } from "../ui/input";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { createAccount } from "@/lib/actions/user.actions";
+import { createAccount, signInUser } from "@/lib/actions/user.actions";
 import OTPModal from "../OTPModal";
 
 function SignInAuthForm() {
@@ -38,11 +38,7 @@ function SignInAuthForm() {
     setErrorMessage("");
 
     try {
-      const user = await createAccount({
-        fullName: "",
-        email: data.email,
-      });
-
+      const user = await signInUser({ email: data.email });
       setAccountId(user.accountId);
     } catch (error) {
       setErrorMessage("Failed to create an account. Please try again.");
