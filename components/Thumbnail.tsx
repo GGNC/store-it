@@ -4,23 +4,23 @@ import React from "react";
 
 interface ThumbnailProps {
   type: string;
-  extention: string;
+  extension: string;
   url?: string;
   imageClassName?: string;
   className?: string;
 }
 function Thumbnail({
   type,
-  extention,
+  extension,
   url = "",
   imageClassName,
   className,
 }: ThumbnailProps) {
-  const isImage = type === "image" && extention !== "svg";
+  const isImage = type === "image" && extension !== "svg";
   return (
     <figure className={cn("thumbnail", className)}>
       <Image
-        src={isImage ? url : getFileIcon(extention, type)}
+        src={isImage ? url : getFileIcon(extension, type)}
         alt="thumbnail"
         width={100}
         height={100}
