@@ -5,13 +5,17 @@ import { getFileTypesParams } from "@/lib/utils";
 import { Models } from "node-appwrite";
 import React from "react";
 
-async function Page({ params }: SearchParamProps) {
+async function Page({ searchParams, params }: SearchParamProps) {
   const type = ((await params).type as string) || "";
+  const searchText = ((await searchParams)?.query as string) || "";
+  const sort = ((await searchParams)?.sort as string) || "";
   const types = getFileTypesParams(type) as FileType[];
-  const files = await getFiles({ types });
+  const files = await getFiles({ types, searchText, sort });
+
   const renderedFiles = files.documents.map((file: Models.Document) => {
     return <Card key={file.$id} file={file} />;
   });
+
   return (
     <div className="page-container">
       <section className="w-full">
