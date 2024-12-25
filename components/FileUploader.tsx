@@ -36,7 +36,7 @@ function FileUploader({ ownerId, accountId, className }: FileUploaderProps) {
         <div className="flex items-center gap-3">
           <Thumbnail
             type={type}
-            extention={extension}
+            extension={extension}
             url={convertFileToUrl(file)}
           />
           <div className="preview-item-name">

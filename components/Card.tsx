@@ -12,7 +12,7 @@ function Card({ file }: { file: Models.Document }) {
       <div className="flex justify-between">
         <Thumbnail
           type={file.type}
-          extention={file.extention}
+          extension={file.extension}
           url={file.url}
           className="!size-20"
           imageClassName="!size-11"
