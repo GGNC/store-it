@@ -1,20 +1,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Models } from "node-appwrite";
+
+import ActionDropdown from "@/components/ActionDropdown";
+import { Chart } from "@/components/Chart";
+import { FormattedDateTime } from "@/components/FormattedDateTime";
+import { Thumbnail } from "@/components/Thumbnail";
 import { Separator } from "@/components/ui/separator";
 import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
 import { convertFileSize, getUsageSummary } from "@/lib/utils";
-import FormattedDateTime from "@/components/FormattedDateTime";
-import ActionsDropDown from "@/components/ActionsDropDown";
-import Thumbnail from "@/components/Thumbnail";
-import { Chart } from "@/components/Chart";
 
 const Dashboard = async () => {
+  // Parallel requests
   const [files, totalSpace] = await Promise.all([
     getFiles({ types: [], limit: 10 }),
     getTotalSpaceUsed(),
   ]);
 
+  // Get usage summary
   const usageSummary = getUsageSummary(totalSpace);
 
   return (
@@ -22,6 +25,7 @@ const Dashboard = async () => {
       <section>
         <Chart used={totalSpace.used} />
 
+        {/* Uploaded file type summaries */}
         <ul className="dashboard-summary-list">
           {usageSummary.map((summary) => (
             <Link
@@ -54,6 +58,8 @@ const Dashboard = async () => {
           ))}
         </ul>
       </section>
+
+      {/* Recent files uploaded */}
       <section className="dashboard-recent-files">
         <h2 className="h3 xl:h2 text-light-100">Recent files uploaded</h2>
         {files.documents.length > 0 ? (
@@ -79,7 +85,7 @@ const Dashboard = async () => {
                       className="caption"
                     />
                   </div>
-                  <ActionsDropDown file={file} />
+                  <ActionDropdown file={file} />
                 </div>
               </Link>
             ))}
